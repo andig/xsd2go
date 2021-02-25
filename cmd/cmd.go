@@ -1,9 +1,10 @@
-package cmd
+package main
 
 import (
+	"os"
+
 	"github.com/gocomply/xsd2go/pkg/xsd2go"
 	"github.com/urfave/cli"
-	"os"
 )
 
 // Execute ...
