@@ -8,6 +8,7 @@ import "github.com/andig/evcc/hems/eebus/util"
 
 // xs:element declarations
 {{range .ExportableElements }}
+  // {{ .GoName }} message container
   type Cmi{{ .GoName }} struct {
     {{ .GoName }} {{ .GoName }} `json:"{{.Name}}"`
   }

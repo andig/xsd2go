@@ -29,7 +29,7 @@ func setXmlNameAnyForSingleElements(elements []Element) []Element {
 	if len(elements) == 1 {
 		result := make([]Element, 1)
 		element := elements[0]
-		element.XmlNameOverride = ",any"
+		// element.XmlNameOverride = ",any"
 		result[0] = element
 		return result
 	} else {
@@ -160,8 +160,11 @@ func (st *SimpleType) GoName() string {
 }
 
 func (st *SimpleType) GoTypeName() string {
-	if st.Restriction != nil && st.Restriction.typ != nil {
-		return st.Restriction.typ.GoTypeName()
+	// if st.Restriction != nil && st.Restriction.typ != nil {
+	// 	return st.Restriction.typ.GoTypeName()
+	// }
+	if st.Restriction != nil {
+		return st.Name
 	}
 	return "string"
 }
