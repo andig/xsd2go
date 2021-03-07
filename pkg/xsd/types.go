@@ -47,6 +47,7 @@ type ComplexType struct {
 	Mixed            bool            `xml:"mixed,attr"`
 	AttributesDirect []Attribute     `xml:"attribute"`
 	Sequence         *Sequence       `xml:"sequence"`
+	Union            *Union          `xml:"union"`
 	schema           *Schema         `xml:"-"`
 	SimpleContent    *SimpleContent  `xml:"simpleContent"`
 	ComplexContent   *ComplexContent `xml:"complexContent"`
@@ -73,6 +74,8 @@ func (ct *ComplexType) HasXmlNameAttribute() bool {
 func (ct *ComplexType) Elements() []Element {
 	if ct.Sequence != nil {
 		return setXmlNameAnyForSingleElements(ct.Sequence.Elements())
+	} else if ct.Union != nil {
+		return setXmlNameAnyForSingleElements(ct.Union.Elements())
 	} else if ct.content != nil {
 		return setXmlNameAnyForSingleElements(ct.content.Elements())
 	} else if ct.Choice != nil {
@@ -134,6 +137,9 @@ func (ct *ComplexType) compile(sch *Schema, parentElement *Element) {
 		if ct.Sequence != nil {
 			panic("Not implemented: xsd:complexType " + ct.Name + " defines xsd:sequence and xsd:*Content")
 		}
+		if ct.Union != nil {
+			panic("Not implemented: xsd:complexType " + ct.Name + " defines xsd:union and xsd:*Content")
+		}
 		ct.content.compile(sch, parentElement)
 	}
 
@@ -143,6 +149,9 @@ func (ct *ComplexType) compile(sch *Schema, parentElement *Element) {
 		}
 		if ct.Sequence != nil {
 			panic("Not implemented: xsd:complexType " + ct.Name + " defines xsd:choice and xsd:sequence")
+		}
+		if ct.Union != nil {
+			panic("Not implemented: xsd:complexType " + ct.Name + " defines xsd:choice and xsd:union")
 		}
 		ct.Choice.compile(sch, parentElement)
 	}
@@ -240,14 +249,18 @@ var staticTypes = map[string]staticType{
 	"anyType":            "string",
 	"int":                "int",
 	"hexBinary":          "byte",
-	"unsignedShort":      "uint8",
-	"unsignedInt":        "uint",
 	"integer":            "int64",
 	"nonNegativeInteger": "int",
 	"anyURI":             "string",
 	"decimal":            "float64",
 	"boolean":            "bool",
 	"ID":                 "string",
+	"unsignedInt":        "uint",
+	"unsignedByte":       "uint8",
+	"unsignedShort":      "uint16",
+	"unsignedLong":       "uint64",
+	"duration":           "uint64",
+	"time":               "time.Time",
 }
 
 func StaticType(name string) staticType {

@@ -16,8 +16,33 @@ func NewWorkspace(goModulesPath, xsdPath string) (*Workspace, error) {
 		Cache:         map[string]*Schema{},
 		GoModulesPath: goModulesPath,
 	}
-	var err error
-	_, err = ws.loadXsd(xsdPath)
+
+	_, err := ws.loadXsd(xsdPath)
+
+	cbd := ws.Cache["combined.xsd"]
+	fmt.Println(cbd)
+
+	res := Schema{
+		Xmlns:           cbd.Xmlns,
+		XMLName:         cbd.XMLName,
+		TargetNamespace: cbd.TargetNamespace,
+		ModulesPath:     cbd.ModulesPath,
+		filePath:        cbd.filePath,
+	}
+
+	for k, s := range ws.Cache {
+		res.SimpleTypes = append(res.SimpleTypes, s.SimpleTypes...)
+		res.ComplexTypes = append(res.ComplexTypes, s.ComplexTypes...)
+		res.Attributes = append(res.Attributes, s.Attributes...)
+		res.Elements = append(res.Elements, s.Elements...)
+		res.AttributeGroups = append(res.AttributeGroups, s.AttributeGroups...)
+
+		delete(ws.Cache, k)
+	}
+
+	ws.Cache["base"] = &res
+	res.compile()
+
 	return &ws, err
 }
 
@@ -38,6 +63,7 @@ func (ws *Workspace) loadXsd(xsdPath string) (*Schema, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	schema.ModulesPath = ws.GoModulesPath
 	schema.filePath = xsdPath
 	ws.Cache[xsdPath] = schema
@@ -48,6 +74,7 @@ func (ws *Workspace) loadXsd(xsdPath string) (*Schema, error) {
 			return nil, err
 		}
 	}
-	schema.compile()
+
+	// schema.compile()
 	return schema, nil
 }

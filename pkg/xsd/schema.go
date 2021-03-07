@@ -46,6 +46,9 @@ func (sch *Schema) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 }
 
 func (sch *Schema) compile() {
+	fmt.Println(sch.XMLName)
+	fmt.Println(sch.Xmlns)
+
 	for idx, _ := range sch.Elements {
 		el := &sch.Elements[idx]
 		el.compile(sch, nil)
