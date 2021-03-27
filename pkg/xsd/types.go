@@ -248,6 +248,10 @@ var staticTypes = map[string]staticType{
 	"decimal":            "float64",
 	"boolean":            "bool",
 	"ID":                 "string",
+	"unsignedByte":       "uint8",
+	"unsignedLong":       "uint64",
+	"duration":           "string",
+	"time":               "string",
 }
 
 func StaticType(name string) staticType {
