@@ -26,7 +26,7 @@ type Schema struct {
 	inlinedElements []Element          `xml:"-"`
 }
 
-func parseSchema(f io.Reader) (*Schema, error) {
+func ParseSchema(f io.Reader) (*Schema, error) {
 	schema := Schema{importedModules: map[string]*Schema{}}
 	d := xml.NewDecoder(f)
 

@@ -34,7 +34,7 @@ func (ws *Workspace) loadXsd(xsdPath string) (*Schema, error) {
 	}
 	defer f.Close()
 
-	schema, err := parseSchema(f)
+	schema, err := ParseSchema(f)
 	if err != nil {
 		return nil, err
 	}
