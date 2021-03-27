@@ -1,3 +1,5 @@
 /gocomply_xsd2go
 foo/ship
 ship
+*.xsd
+out

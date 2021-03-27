@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/gocomply/xsd2go/cmd"
+)
+
 func main() {
-	Execute()
+	cmd.Execute()
 }
