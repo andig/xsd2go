@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"encoding/xml"
+	"fmt"
 	"io"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/andig/xsd2go/pkg/xsd"
 	"github.com/thoas/go-funk"
@@ -40,6 +42,17 @@ func merge(schema *xsd.Schema) {
 	if summary == nil {
 		summary = schema
 		return
+	}
+
+NAMESPACES:
+	for _, ns := range schema.Xmlns {
+		for _, summaryns := range summary.Xmlns {
+			if summaryns.Prefix == ns.Prefix {
+				continue NAMESPACES
+			}
+		}
+
+		summary.Xmlns = append(summary.Xmlns, ns)
 	}
 
 	summary.Imports = append(summary.Imports, schema.Imports...)
@@ -93,6 +106,14 @@ func check() {
 	}
 }
 
+func namespaces() string {
+	ns := funk.Map(summary.Xmlns, func(ns xsd.XmlnsAttr) string {
+		return fmt.Sprintf("xmls:%s=%s", ns.Prefix, ns.Uri)
+	}).([]string)
+
+	return strings.Join(ns, " ")
+}
+
 func mergeFiles(files []string) error {
 	for _, f := range files {
 		// fmt.Println(f)
@@ -112,6 +133,7 @@ func mergeFiles(files []string) error {
 
 	check()
 
+	io.WriteString(os.Stdout, fmt.Sprintf("<!-- %s -->\n", namespaces()))
 	io.WriteString(os.Stdout, xml.Header)
 	e := xml.NewEncoder(os.Stdout)
 	e.Indent("", "    ")

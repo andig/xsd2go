@@ -4,17 +4,17 @@ import (
 	"encoding/xml"
 )
 
-type xmlns struct {
+type XmlnsAttr struct {
 	Prefix string
 	Uri    string
 }
 
-type Xmlns []xmlns
+type Xmlns []XmlnsAttr
 
 func parseXmlns(el xml.StartElement) (result Xmlns) {
 	for _, attr := range el.Attr {
 		if attr.Name.Space == "xmlns" {
-			result = append(result, xmlns{
+			result = append(result, XmlnsAttr{
 				Prefix: attr.Name.Local,
 				Uri:    attr.Value,
 			})
