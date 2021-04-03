@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/gocomply/xsd2go/pkg/xsd"
+	"github.com/andig/xsd2go/pkg/xsd"
 	"github.com/thoas/go-funk"
 	"github.com/urfave/cli"
 )

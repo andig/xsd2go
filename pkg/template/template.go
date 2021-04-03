@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/gocomply/xsd2go/pkg/xsd"
+	"github.com/andig/xsd2go/pkg/xsd"
 )
 
 func GenerateTypes(schema *xsd.Schema, outputDir string) error {
